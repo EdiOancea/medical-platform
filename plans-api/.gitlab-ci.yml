@@ -1,0 +1,25 @@
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - deploy_prod
+
+build:
+  stage: build
+  image: node:12.18.3
+  script:
+    - npm install
+
+deploy_production:
+  image: node:12.18.3
+  stage: deploy_prod
+  script:
+    - git push https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/distributed-s-assignment-3-api.git HEAD:master
+    - echo "Deployed to production"
+  environment:
+    name: production
+    url: https://distributed-s-assignment-3-api.herokuapp.com
+  only:
+    - master
